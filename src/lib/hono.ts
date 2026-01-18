@@ -3,7 +3,7 @@ import { hc } from "hono/client";
 
 
 
-const BASE_URL ="https://marathon-llsu.vercel.app"
+const BASE_URL ="https://marathon-sit-25.vercel.app/"
 
 const client = hc<ApiType>(BASE_URL);
 
