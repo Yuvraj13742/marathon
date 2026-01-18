@@ -5,7 +5,7 @@ import { AlertDescription } from "@/components/ui/alert";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserInfo } from "@/hooks/get-user";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
@@ -29,10 +29,19 @@ export default function CodeValidator() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [isValidating, setIsValidating] = useState(false);
   const [isValidCodeState, setIsValidCodeState] = useState(true);
+  const [templateBytes, setTemplateBytes] = useState<ArrayBuffer | null>(null);
+  const [status, setStatus] = useState<"idle" | "validating" | "fetching" | "generating" | "success">("idle");
 
-  const { data: user, isLoading: isQueryLoading, isError, error: queryError } = useUserInfo(code);
+  const { data: user, isLoading: isQueryLoading, isError, error: queryError, refetch } = useUserInfo(code);
+
+  useEffect(() => {
+    // Prefetch the certificate image
+    fetch("https://i.imgur.com/T7AMnkD.png")
+      .then((res) => res.arrayBuffer())
+      .then((bytes) => setTemplateBytes(bytes))
+      .catch((err) => console.error("Failed to preload certificate template", err));
+  }, []);
 
   const generateCertificatePDF = async (participantName: string): Promise<Uint8Array | null> => {
     try {
@@ -42,8 +51,15 @@ export default function CodeValidator() {
       const page = pdfDoc.addPage([pageWidth, pageHeight]);
       const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-      const imageUrl = "https://i.imgur.com/T7AMnkD.png";
-      const imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
+      let imageBytes: ArrayBuffer;
+      if (templateBytes) {
+        imageBytes = templateBytes;
+      } else {
+        const imageUrl = "https://i.imgur.com/T7AMnkD.png";
+        imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
+        setTemplateBytes(imageBytes); // Cache it
+      }
+
       const backgroundImage = await pdfDoc.embedPng(imageBytes);
 
       page.drawImage(backgroundImage, {
@@ -77,57 +93,58 @@ export default function CodeValidator() {
     e.preventDefault();
     setError("");
     setSuccess(false);
-    setIsValidating(true);
 
     if (!isValidCode(code)) {
       setError("Invalid Code! It must be 5 digits followed by 1 uppercase letter based on a checksum (e.g., 12345O).");
       setIsValidCodeState(false);
-      setIsValidating(false);
       return;
     }
 
     setIsValidCodeState(true);
-
-    if (isQueryLoading) return;
-
-    if (isError) {
-      setError(queryError instanceof Error ? queryError.message : "Something went wrong");
-      setIsValidating(false);
-      return;
-    }
-
-    if (!user) {
-      setError("Failed to retrieve user information. Please try again.");
-      setIsValidating(false);
-      return;
-    }
-
-    if (!user.isCrossed) {
-      setError("You are not eligible for a certificate yet.");
-      setIsValidating(false);
-      return;
-    }
+    setStatus("fetching");
 
     try {
-      const pdfBytes = await generateCertificatePDF(user.name);
+      // Wait for or trigger a fetch
+      let currentUser = user;
+      if (!currentUser || code !== user.unique_code) {
+        const result = await refetch();
+        currentUser = result.data;
+      }
+
+      if (!currentUser) {
+        setError(queryError instanceof Error ? queryError.message : "User not found or code is incorrect.");
+        setStatus("idle");
+        return;
+      }
+
+      if (!currentUser.isCrossed) {
+        setError("You are not eligible for a certificate yet. Please complete the marathon.");
+        setStatus("idle");
+        return;
+      }
+
+      setStatus("generating");
+      const pdfBytes = await generateCertificatePDF(currentUser.name);
 
       if (pdfBytes) {
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
 
         const a = document.createElement("a");
         a.href = url;
-        a.download = `Certificate-${user.name}.pdf`;
+        a.download = `Certificate-${currentUser.name}.pdf`;
         a.click();
 
         window.URL.revokeObjectURL(url);
         setSuccess(true);
+        setStatus("success");
+      } else {
+        throw new Error("Failed to generate PDF");
       }
     } catch (error) {
       console.error("Certificate generation error:", error);
       setError("Failed to process your request. Please try again.");
-    } finally {
-      setIsValidating(false);
+      setStatus("idle");
     }
   };
 
@@ -157,9 +174,11 @@ export default function CodeValidator() {
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={isValidating}
+              disabled={status !== "idle" && status !== "success"}
             >
-              {isValidating ? "Validating..." : "Validate Code"}
+              {status === "fetching" ? "Checking Info..." :
+                status === "generating" ? "Generating Certificate..." :
+                  "Download Certificate"}
             </Button>
           </form>
 

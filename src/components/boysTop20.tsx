@@ -95,7 +95,7 @@ const BoysCrossComponent: React.FC = () => {
 
     setLoading(true);
     const pdfBytes = await generatePdf(validatedParticipants, "Top 20 Participants - Boys");
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");

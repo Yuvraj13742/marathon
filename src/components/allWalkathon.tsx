@@ -13,7 +13,7 @@ const CrossDataSchema = z.object({
   name: z.string(),
   email: z.string().nullable(),
   phone_no: z.string(),
-  usn: z.string().nullable(), 
+  usn: z.string().nullable(),
   Gender: z.enum(["boy", "girl"]),
   category: z.enum(["girls", "boys", "walkathon_f", "walkathon_m"]),
   isCrossed: z.boolean(),
@@ -83,7 +83,7 @@ const AllWalkathonParticipants: React.FC = () => {
 
     setLoading(true);
     const pdfBytes = await generatePdf(validatedParticipants, "All Walkathon Participants");
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");

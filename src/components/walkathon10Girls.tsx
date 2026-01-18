@@ -84,7 +84,7 @@ const WalkathonTop10Girls: React.FC = () => {
     if (!validated.length) return;
     setLoading(true);
     const pdfBytes = await generatePdf(validated, "Top 10 - Walkathon Girls");
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const blob = new Blob([pdfBytes as any], { type: "application/pdf" });
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
