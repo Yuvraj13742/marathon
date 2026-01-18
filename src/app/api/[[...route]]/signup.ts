@@ -90,6 +90,7 @@ const registerRouter = new Hono()
       .values({
         unique_code: body.unique_code,
         name: body.name,
+        email: body.email,
         phone_no: body.phone_no,
         usn,
         category: "girls",
@@ -123,6 +124,7 @@ const registerRouter = new Hono()
       .values({
         unique_code: body.unique_code,
         name: body.name,
+        email: body.email,
         phone_no: body.phone_no,
         usn,
         category: "boys",
@@ -158,6 +160,7 @@ const registerRouter = new Hono()
       .values({
         unique_code: body.unique_code,
         name: body.name,
+        email: body.email,
         phone_no: body.phone_no,
         usn: body.usn,
         category,

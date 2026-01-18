@@ -34,7 +34,8 @@ const userRouter = new Hono().get(
         .select({
           isCrossed: masterTable.isCrossed,
           name: masterTable.name,
-          unique_code: masterTable.unique_code
+          unique_code: masterTable.unique_code,
+          email: masterTable.email
         })
         .from(masterTable)
         .where(eq(masterTable.unique_code, unique_code))
