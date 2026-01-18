@@ -106,7 +106,7 @@ export default function CodeValidator() {
     try {
       // Wait for or trigger a fetch
       let currentUser = user;
-      if (!currentUser || code !== user.unique_code) {
+      if (!currentUser || code !== currentUser.unique_code) {
         const result = await refetch();
         currentUser = result.data;
       }
