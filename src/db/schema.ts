@@ -20,7 +20,7 @@ export const genderEnum = pgEnum("gender", ["girl", "boy"]);
 // Define Table
 export const masterTable = pgTable("master", {
   id: uuid("id").primaryKey().defaultRandom(),
-  unique_code: text("unique_code").notNull(),
+  unique_code: text("unique_code").notNull().unique(),
   name: text("name").notNull(),
   email: text("email"),
   Gender: genderEnum("Gender"),

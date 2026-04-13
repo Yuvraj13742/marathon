@@ -102,12 +102,15 @@ const registerRouter = new Hono()
     if (res.length === 0)
       return c.json({ error: "Error in registering user!" }, 400);
 
-    const emailSent = body.email ? await sendEmail(body.email, body.unique_code) : false;
+    if (body.email) {
+      // Run in background without making the user wait
+      sendEmail(body.email, body.unique_code).catch(console.error);
+    }
 
     return c.json(
       {
         message: "User registered successfully",
-        emailSent: body.email ? emailSent : "No email provided",
+        emailSent: body.email ? true : "No email provided",
       },
       201
     );
@@ -136,12 +139,15 @@ const registerRouter = new Hono()
     if (res.length === 0)
       return c.json({ error: "Error in registering user!" }, 400);
 
-    const emailSent = body.email ? await sendEmail(body.email, body.unique_code) : false;
+    if (body.email) {
+      // Run in background without making the user wait
+      sendEmail(body.email, body.unique_code).catch(console.error);
+    }
 
     return c.json(
       {
         message: "User registered successfully",
-        emailSent: body.email ? emailSent : "No email provided",
+        emailSent: body.email ? true : "No email provided",
       },
       201
     );
@@ -171,12 +177,15 @@ const registerRouter = new Hono()
     if (res.length === 0)
       return c.json({ error: "Error in registering user!" }, 400);
 
-    const emailSent = body.email ? await sendEmail(body.email, body.unique_code) : false;
+    if (body.email) {
+      // Run in background without making the user wait
+      sendEmail(body.email, body.unique_code).catch(console.error);
+    }
 
     return c.json(
       {
         message: "User registered successfully",
-        emailSent: body.email ? emailSent : "No email provided",
+        emailSent: body.email ? true : "No email provided",
       },
       201
     );
