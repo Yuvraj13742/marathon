@@ -37,7 +37,7 @@ export default function CodeValidator() {
 
   useEffect(() => {
     // Prefetch the certificate image
-    fetch("https://i.imgur.com/T7AMnkD.png")
+    fetch("https://i.imgur.com/yd9CZNp.png")
       .then((res) => res.arrayBuffer())
       .then((bytes) => setTemplateBytes(bytes))
       .catch((err) => console.error("Failed to preload certificate template", err));
@@ -55,7 +55,7 @@ export default function CodeValidator() {
       if (templateBytes) {
         imageBytes = templateBytes;
       } else {
-        const imageUrl = "https://i.imgur.com/T7AMnkD.png";
+        const imageUrl = "https://i.imgur.com/yd9CZNp.png";
         imageBytes = await fetch(imageUrl).then((res) => res.arrayBuffer());
         setTemplateBytes(imageBytes); // Cache it
       }
@@ -151,7 +151,7 @@ export default function CodeValidator() {
   return (
     <div className="flex flex-col min-h-dvh bg-gradient-to-b from-blue-100 to-white">
       <header className="flex items-center justify-between p-4 border-b bg-white shadow-sm">
-        <h1 className="text-xl font-bold text-blue-600">Marathon 16.0</h1>
+        <h1 className="text-xl font-bold text-blue-600">Marathon 17.0</h1>
       </header>
 
       <main className="flex-1 flex flex-col items-center justify-center p-6">

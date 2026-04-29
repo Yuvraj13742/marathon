@@ -51,7 +51,7 @@ export default function HomePage() {
 
       <footer className="fixed bottom-0 left-0 w-full py-3 text-center bg-black/30 text-sm">
         <p>
-          © 2025 Marathon Event |{" "}
+          © 2026 Marathon Event |{" "}
           <a href="https://www.pathfindersit.in/" className="underline hover:text-gray-300">
             Team Pathfinder
           </a>

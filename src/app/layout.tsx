@@ -9,7 +9,7 @@ const font = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Marathon 16.0",
+  title: "Marathon 17.0",
   description: "Created by PathFinder Volunteers",
   authors: [
     { name: "Tanmay Deshpande" },

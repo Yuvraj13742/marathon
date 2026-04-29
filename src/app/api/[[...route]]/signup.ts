@@ -52,7 +52,7 @@ const sendEmail = async (to: string, uniqueCode: string): Promise<boolean> => {
     subject: "Registration Successful",
     text: `Dear Participant,
 
-Thank you for registering for the PathFinder Marathon 2025. We are excited to have you as part of this special event.
+Thank you for registering for the PathFinder Marathon 2026. We are excited to have you as part of this special event.
 
 Your registration has been successfully received. Please find your unique participant code below:
 

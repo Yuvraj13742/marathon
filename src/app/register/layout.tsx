@@ -18,7 +18,7 @@ export default function RegistrationLayout({ children }: { children: ReactNode }
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 w-full py-3 text-center bg-black/30">
-        <p>© 2025 Marathon Event | <a href="https://www.pathfindersit.in/">Team Pathfinder</a></p>
+        <p>© 2026 Marathon Event | <a href="https://www.pathfindersit.in/">Team Pathfinder</a></p>
       </footer>
     </div>
   );

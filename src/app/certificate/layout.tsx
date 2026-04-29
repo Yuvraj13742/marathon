@@ -6,8 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Marathon 16.0 - Code Validator",
-  description: "Validate your unique Marathon 16.0 code",
+  title: "Marathon 17.0 - Code Validator",
+  description: "Validate your unique Marathon 17.0 code",
 }
 
 export default function RootLayout({
