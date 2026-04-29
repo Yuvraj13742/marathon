@@ -72,7 +72,7 @@ export default function CodeValidator() {
       const nameSize = 28;
       const nameTextWidth = font.widthOfTextAtSize(participantName, nameSize);
       const nameX = (pageWidth - nameTextWidth) / 2;
-      const nameY = pageHeight / 2 + 25;
+      const nameY = pageHeight / 2 + 20;
 
       page.drawText(participantName, {
         x: nameX,
